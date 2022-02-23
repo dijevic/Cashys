@@ -18,8 +18,6 @@ class Server {
             categories: '/api/v1/categories',
             balance: '/api/v1/balance',
             operation: '/api/v1/operation',
-
-
         }
         this.dbConection()
         this.middlewares()
@@ -33,11 +31,11 @@ class Server {
     async dbConection() {
 
         try {
-            await sequelize.sync();
+            await sequelize.authenticate();
             console.log('Connection has been established successfully.')
 
-        } catch (e) {
-            console.log({ e })
+        } catch (error) {
+            console.log({ error })
         }
 
 

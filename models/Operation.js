@@ -13,6 +13,20 @@ const Operation = sequelize.define('Operation', {
         }
 
     },
+    user_id: {
+        type: DataTypes.INTEGER,
+        get() {
+            let rawValue = this.getDataValue('id');
+            return rawValue = undefined;
+        }
+    },
+    category_id: {
+        type: DataTypes.INTEGER,
+        get() {
+            let rawValue = this.getDataValue('id');
+            return rawValue = undefined;
+        }
+    },
     uuid: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4

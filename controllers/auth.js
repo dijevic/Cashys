@@ -1,10 +1,10 @@
 const { response, request } = require('express')
+const User = require('../models/User')
 const { encript, checkPassword } = require('../helpers/encript')
 const { sendRecoverEmail, sendRegistrationEmail } = require('../helpers/sendEmail')
 const generateJWT = require('../helpers/generateJWT')
 const Category = require('../models/Category')
 const Balance = require('../models/Balance')
-const User = require('../models/User')
 const { StatusCodes } = require('http-status-codes');
 
 
@@ -15,7 +15,7 @@ const renewUserToken = async (req = request, res = response) => {
     try {
 
         const user = req.user
-        const token = await generateJWT(user.uuid)
+        const token = await generateJWT({ id: user.uuid, type: 'user_verification' })
 
         res.status(StatusCodes.OK).json({
             ok: true,
@@ -41,23 +41,15 @@ const renewUserToken = async (req = request, res = response) => {
 const loginUser = async (req = request, res = response) => {
 
     try {
-        const { email, password } = req.body
 
-        const user = await User.findOne({
-            where: { email }
-        })
+        const user = req.user
+        const { password } = req.body
 
-        if (!user) {
-            return res.status(StatusCodes.BAD_REQUEST).json({
-                msg: `unsuccess, email or password wrong correo`,
-                status: 400,
-                ok: false
 
-            })
 
-        }
 
         const validPassword = checkPassword(password, user.getDataValue('password'))
+
         if (!validPassword) {
             return res.status(StatusCodes.BAD_REQUEST).json({
                 msg: `unsuccess, email or password wrong`,
@@ -67,7 +59,7 @@ const loginUser = async (req = request, res = response) => {
         }
 
 
-        const token = await generateJWT({ id: user.uuid })
+        const token = await generateJWT({ id: user.uuid, type: 'user_verification' })
 
         res.status(StatusCodes.OK).json({
             ok: true,
@@ -76,14 +68,18 @@ const loginUser = async (req = request, res = response) => {
             id: user.uuid,
             name: user.name,
             email: user.email,
-            token,
+            token
 
         })
 
 
     } catch (error) {
         console.log(e)
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ ok: false, status: 500, msg: 'something went wrong :(' })
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            ok: false,
+            status: 500,
+            msg: 'something went wrong '
+        })
     }
 
 
@@ -102,10 +98,10 @@ const createUser = async (req = request, res = response) => {
     }
 
     const user = await User.create(data)
-    await Category.create({ name: 'General', UserId: user.getDataValue('id') })
-    await Balance.create({ UserId: user.getDataValue('id') })
+    await Category.create({ name: 'General', user_id: user.getDataValue('id') })
+    await Balance.create({ user_id: user.getDataValue('id') })
 
-    const token = await generateJWT(user.uuid)
+    const token = await generateJWT({ id: user.uuid, type: 'user_verification' })
 
     res.status(StatusCodes.CREATED).json({
         ok: true,
@@ -122,19 +118,11 @@ const createUser = async (req = request, res = response) => {
 
 
 const forgotPassword = async (req = request, res = response) => {
-    const { email, password } = req.body
+    const { password } = req.body
 
-    const user = await User.findOne({ where: { email } })
+    const user = req.user
 
-    if (!user) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-            ok: false,
-            status: StatusCodes.BAD_REQUEST,
-            msg: `a link was send to your email !`
 
-        })
-
-    }
 
     const verifyPassword = checkPassword(password, user.getDataValue('password'))
 
@@ -148,7 +136,7 @@ const forgotPassword = async (req = request, res = response) => {
 
 
 
-    const resetToken = await generateJWT({ id: user.uuid, password })
+    const resetToken = await generateJWT({ id: user.uuid, password, type: 'reset_verification' })
 
     await user.update({ resetToken })
 
@@ -175,7 +163,6 @@ const forgotPassword = async (req = request, res = response) => {
         status: StatusCodes.OK,
         msg: 'a link was send to your email !',
         // link,
-        resetToken
     })
 
 
@@ -193,7 +180,7 @@ const changePaswword = async (req = request, res = response) => {
     }
 
     await user.update(data)
-    const token = await generateJWT({ id: user.uuid })
+    const token = await generateJWT({ id: user.uuid, type: 'user_verification' })
 
     res.status(StatusCodes.OK).json({
         ok: true,
@@ -214,7 +201,7 @@ const emailVerification = async (req = request, res = response) => {
 
 
     // genero JWT 
-    const token = await generateJWT({ email, password, name })
+    const token = await generateJWT({ email, password, name, type: 'email_verification' })
 
     // add the correct link once i have in hand the link
     // dont forget to add the registration email function

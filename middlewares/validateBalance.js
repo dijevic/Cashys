@@ -3,22 +3,15 @@ const Balance = require("../models/Balance")
 
 const validateBalance = async (req, res, next) => {
 
-    const user = req.user
+    const balance = req.balance
     const { operation_Type, amount } = req.body
 
-    const balance = await Balance.findOne({ where: { UserId: user.getDataValue('id') } })
 
     const numbBalance = Number(balance.amount)
 
 
 
-    if (!balance) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-            ok: false,
-            status: StatusCodes.BAD_REQUEST,
-            msg: `something went wrong, there is not a Balance related with the user`,
-        })
-    }
+
 
 
 
@@ -47,4 +40,9 @@ const validateBalance = async (req, res, next) => {
 
 
 
-module.exports = validateBalance
+
+
+
+
+
+module.exports = { validateBalance }

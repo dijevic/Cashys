@@ -1,5 +1,4 @@
 const { response, request } = require('express');
-const jwt = require('jsonwebtoken');
 
 const { StatusCodes } = require('http-status-codes');
 
@@ -9,34 +8,36 @@ const User = require('../models/User');
 
 const validateJwt = async (req = request, res = response, next) => {
 
-    let token = req.header('x-token')
+    const token = req.token
 
-    if (!token) {
-        return res.status(StatusCodes.UNAUTHORIZED).json({
-            ok: false,
-            status: StatusCodes.UNAUTHORIZED,
-            msg: `unauthorized, missing JWT`
-        })
-    }
 
     try {
 
 
-        const jwtVerified = await validateJwtMiddleware(token)
+        const { data } = await validateJwtMiddleware(token)
 
 
-        if (!jwtVerified) return res.status(StatusCodes.BAD_REQUEST).json({
-            msg: ` session expired`,
+        if (!data) return res.status(StatusCodes.BAD_REQUEST).json({
+            msg: `session expired`,
             ok: false,
             status: StatusCodes.BAD_REQUEST
         })
 
-        const { data } = jwtVerified
+
+
+
+
+        if (data.type != 'user_verification') {
+            return res.status(StatusCodes.UNAUTHORIZED).json({
+                ok: false,
+                status: StatusCodes.UNAUTHORIZED,
+                msg: `unauthorized, missing JWT`
+            })
+        }
 
 
         const { id } = data
 
-        console.log(id)
 
         const user = await User.findOne({ where: { uuid: id } })
         if (!user) {
@@ -61,30 +62,29 @@ const validateJwt = async (req = request, res = response, next) => {
 
 const validateEmailJWT = async (req = request, res = response, next) => {
 
-    let token = req.header('x-token')
-
-
-    if (!token) {
-        return res.status(StatusCodes.UNAUTHORIZED).json({
-            ok: false,
-            status: StatusCodes.UNAUTHORIZED,
-            msg: `unauthorized, missing JWT`
-        })
-    }
+    const token = req.token
 
 
     try {
 
-        const jwtVerified = await validateJwtMiddleware(token)
+        const { data } = await validateJwtMiddleware(token)
 
 
-        if (!jwtVerified) return res.status(StatusCodes.BAD_REQUEST).json({
+        if (!data) return res.status(StatusCodes.BAD_REQUEST).json({
             msg: ` session expired`,
             ok: false,
             status: StatusCodes.BAD_REQUEST
         })
 
-        const { data } = jwtVerified
+
+
+        if (data.type != 'email_verification') {
+            return res.status(StatusCodes.UNAUTHORIZED).json({
+                ok: false,
+                status: StatusCodes.UNAUTHORIZED,
+                msg: `unauthorized, missing JWT`
+            })
+        }
         const { name, email, password } = data
 
         const user = await User.findOne({ where: { email } })
@@ -116,19 +116,20 @@ const validateEmailJWT = async (req = request, res = response, next) => {
 
 const validateResetJWT = async (req = request, res = response, next) => {
 
-    let token = req.header('x-token')
+    const token = req.token
 
-    if (!token) {
-        return res.status(StatusCodes.UNAUTHORIZED).json({
-            ok: false,
-            status: StatusCodes.UNAUTHORIZED,
-            msg: `unauthorized, missing JWT`
-        })
-    }
 
     try {
 
         const { data } = await validateJwtMiddleware(token)
+
+        if (data.type != 'reset_verification') {
+            return res.status(StatusCodes.UNAUTHORIZED).json({
+                ok: false,
+                status: StatusCodes.UNAUTHORIZED,
+                msg: `unauthorized, missing JWT`
+            })
+        }
 
         const { id, password } = data
 

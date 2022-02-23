@@ -4,10 +4,10 @@ const User = require("./User");
 const Balance = require("./Balance");
 
 
-User.hasMany(Operation)
-User.hasMany(Category)
-User.hasMany(Balance)
-Category.hasMany(Operation)
+User.hasMany(Operation, { foreignKey: 'user_id', as: 'operations' })
+User.hasMany(Category, { foreignKey: 'user_id', as: 'categories' })
+User.hasMany(Balance, { foreignKey: 'user_id', as: 'balance' })
+Category.hasMany(Operation, { foreignKey: 'category_id', as: 'operations' })
 
 module.exports = {
     User,

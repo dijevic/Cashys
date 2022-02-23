@@ -8,9 +8,12 @@ const { createUser,
     forgotPassword,
     changePaswword,
     renewUserToken } = require('../controllers/auth')
-const { validEmail, notValidEmail } = require('../middlewares/dbVallidator')
 const validarCampos = require('../middlewares/validate')
 const { validateEmailJWT, validateJwt, validateResetJWT } = require('../middlewares/verifyJWT')
+const { isValidEmail, isInvalidValidEmail, } = require('../middlewares/dbValidators')
+const { isValidToken } = require('../middlewares/dbValidators')
+
+
 
 const router = Router()
 
@@ -18,9 +21,11 @@ const router = Router()
 
 //  ****EMAIL VERIFICATION***
 router.post('/validate-email',
+
     [
         check('email', 'must be an valid email').isEmail().bail(),
-        check('email').custom(validEmail).bail(),
+        isValidEmail,
+
         check('password', 'password length must be over 6 characters').trim().isLength({ min: 6 }).bail(),
         check('name', 'name is required').not().isEmpty().bail(),
         validarCampos
@@ -31,6 +36,8 @@ router.post('/validate-email',
 
 router.post('/new-user',
     [
+
+        isValidToken,
         validateEmailJWT
     ], createUser)
 
@@ -41,7 +48,7 @@ router.post('/new-user',
 router.post('/login', [
 
     check('email', 'email is required').isEmail().bail(),
-    check('email').custom(notValidEmail).bail(),
+    isInvalidValidEmail,
     check('password', 'password is required').trim().not().isEmpty(),
     validarCampos
 ], loginUser)
@@ -51,6 +58,9 @@ router.post('/login', [
 
 router.get('/renew',
     [
+
+        check('x-token').isJWT(),
+        isValidToken,
         validateJwt,
 
     ], renewUserToken)
@@ -59,6 +69,7 @@ router.get('/renew',
 router.put('/forgot-password',
 
     [
+        isInvalidValidEmail,
         check('email', 'must be a valid Email').isEmail().bail(),
         check('password', 'password length must be over 6 characters').trim().isLength({ min: 6 }),
         validarCampos
@@ -68,12 +79,12 @@ router.put('/forgot-password',
 router.put('/change-password',
 
     [
+
+        check('x-token').isJWT(),
+        isValidToken,
         validateResetJWT
 
     ], changePaswword)
-
-
-
 
 
 

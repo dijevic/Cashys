@@ -10,7 +10,7 @@ const CreateCategory = async (req = request, res = response) => {
 
 
 
-    const category = await Category.create({ name, UserId: user.getDataValue('id') })
+    const category = await Category.create({ name, user_id: user.getDataValue('id') })
 
     res.status(StatusCodes.OK).json({
         ok: true,
@@ -20,15 +20,15 @@ const CreateCategory = async (req = request, res = response) => {
 
     })
 
-
-
 }
+
+
 
 const getCategoriesByUser = async (req = request, res = response) => {
 
     const user = req.user
 
-    const { rows, count } = await Category.findAndCountAll({ where: { UserId: user.getDataValue('id') } })
+    const { rows, count } = await Category.findAndCountAll({ where: { user_id: user.getDataValue('id') } })
 
     res.status(StatusCodes.OK).json({
         ok: true,
@@ -46,21 +46,10 @@ const getCategoriesByUser = async (req = request, res = response) => {
 
 const deleteCategory = async (req = request, res = response) => {
 
-    const { uuid } = req.params
 
-
-    const category = await Category.findOne({ where: { uuid } })
-
-    if (!category) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-            ok: false,
-            status: StatusCodes.BAD_REQUEST,
-            msg: `something went wrong, there is not a category with that id`,
-        })
-    }
+    const category = req.category
 
     await category.destroy()
-
 
     res.status(StatusCodes.OK).json({
         ok: true,
@@ -70,23 +59,14 @@ const deleteCategory = async (req = request, res = response) => {
 
     })
 
-
-
 }
+
+
 const updateCategory = async (req = request, res = response) => {
 
-    const { uuid } = req.params
-    const { uuid: id, ...body } = req.body
+    const { uuid, ...body } = req.body
 
-    const category = await Category.findOne({ where: { uuid } })
-
-    if (!category) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-            ok: false,
-            status: StatusCodes.BAD_REQUEST,
-            msg: `something went wrong, there is not a category with that id`,
-        })
-    }
+    const category = req.category
 
     category.set(body)
 

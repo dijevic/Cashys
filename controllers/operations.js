@@ -2,38 +2,25 @@
 const { response, request } = require('express')
 const Operation = require('../models/Operation')
 const { StatusCodes } = require('http-status-codes');
-const Balance = require('../models/Balance');
-const Category = require('../models/Category');
+
 
 
 const createOperation = async (req = request, res = response) => {
 
     const user = req.user
-    let { amount, description, operation_Type, CategoryId } = req.body
+    const balance = req.balance
+    const category = req.category
 
-    const balance = await Balance.findOne({ where: { UserId: user.getDataValue('id') } })
-    const category = await Category.findOne({ where: { uuid: CategoryId } })
-
-
-
-    if (!category) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-            ok: false,
-            status: StatusCodes.BAD_REQUEST,
-            msg: `something went wrong, there is not a category related with the ID`,
-        })
-    }
-
+    let { amount, description, operation_Type } = req.body
 
     const savedOperation = await Operation.create({
         amount,
         description,
         operation_Type,
-        UserId: user.getDataValue('id'),
-        CategoryId: category.getDataValue('id')
+        user_id: user.getDataValue('id'),
+        category_id: category.getDataValue('id')
     })
 
-    // ajusto el balance 
     let newBalance = 0
 
 
@@ -56,7 +43,7 @@ const createOperation = async (req = request, res = response) => {
     res.status(StatusCodes.OK).json({
         ok: true,
         status: StatusCodes.OK,
-        msg: `Balance updated successfully!`,
+        msg: `Operation created and Balance updated successfully!`,
         balance: savedBalance,
         operation: savedOperation
 
@@ -72,7 +59,7 @@ const getOperationsByUser = async (req = request, res = response) => {
 
     const user = req.user
 
-    const { rows, count } = await Operation.findAndCountAll({ where: { UserId: user.getDataValue('id') } })
+    const { rows, count } = await Operation.findAndCountAll({ where: { user_id: user.getDataValue('id') } })
 
 
     res.status(StatusCodes.OK).json({
@@ -91,27 +78,9 @@ const getOperationsByUser = async (req = request, res = response) => {
 
 const deleteOperation = async (req = request, res = response) => {
 
-    const { uuid } = req.params
-    const user = req.user
+    const balance = req.balance
+    const operation = req.operation
 
-
-    const operation = await Operation.findOne({ where: { uuid } })
-    const balance = await Balance.findOne({ where: { UserId: user.getDataValue('id') } })
-    if (!operation) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-            ok: false,
-            status: StatusCodes.BAD_REQUEST,
-            msg: `something went wrong, there is not a Balance related with the user`,
-        })
-    }
-
-    if (!balance) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-            ok: false,
-            status: StatusCodes.BAD_REQUEST,
-            msg: `balance not related with the user`,
-        })
-    }
 
     let newBalance = 0
 
@@ -126,6 +95,8 @@ const deleteOperation = async (req = request, res = response) => {
         default:
             break;
     }
+
+
     const savedBalance = await balance.set({ amount: newBalance })
     await savedBalance.save()
 
@@ -147,43 +118,14 @@ const deleteOperation = async (req = request, res = response) => {
 }
 const updateOperation = async (req = request, res = response) => {
 
-    const { uuid } = req.params
-    const user = req.user
-
-    const arrBody = Object.values(req.body)
-
-
-    if (arrBody.length === 0) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-            msg: `body is required`,
-            status: StatusCodes.BAD_REQUEST,
-            ok: false
-        })
-    }
-
+    const operation = req.operation
+    const balance = req.balance
 
     let { amount, description } = req.body
 
 
-    const operation = await Operation.findOne({ where: { uuid } })
-    const balance = await Balance.findOne({ where: { UserId: user.getDataValue('id') } })
-
-    if (!operation) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-            ok: false,
-            status: StatusCodes.BAD_REQUEST,
-            msg: `something went wrong, there is not a operation with that id`,
-        })
-    }
-    if (!balance) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-            ok: false,
-            status: StatusCodes.BAD_REQUEST,
-            msg: `balance not related with the user`,
-        })
-    }
-
     let newBalance = 0
+
     let data = {}
 
     let savedBalance;
@@ -204,10 +146,13 @@ const updateOperation = async (req = request, res = response) => {
         }
 
 
+
         data.amount = amount
         savedBalance = await balance.set({ amount: newBalance })
         await savedBalance.save()
     }
+
+
 
 
     if (description) {

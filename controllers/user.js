@@ -8,17 +8,6 @@ const updateUser = async (req = request, res = response) => {
     try {
         let { resetToken, id, uuid, email, ...body } = req.body
         const user = req.user
-        const arrBody = Object.values(body)
-
-
-        if (arrBody.length === 0) {
-            return res.status(StatusCodes.BAD_REQUEST).json({
-                msg: `body is required`,
-                status: StatusCodes.BAD_REQUEST,
-                ok: false
-
-            })
-        }
 
         if (body.password.trim().length === 0) {
             delete body.password
