@@ -81,7 +81,7 @@ router.put('/change-password',
 
     [
 
-        check('x-token').isJWT(),
+
         isValidToken,
         validateResetJWT
 

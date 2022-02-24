@@ -136,9 +136,16 @@ const forgotPassword = async (req = request, res = response) => {
 
 
 
-    const resetToken = await generateJWT({ id: user.uuid, password, type: 'reset_verification' })
+    const resetToken = await generateJWT({ id: user.uuid, password })
+    user.resetToken = resetToken
+    await user.save()
 
-    await user.update({ resetToken })
+
+
+
+
+
+
 
     // const link = `https://taskys.netlify.app/auth/change-password/${resetToken}`
     // change reset token for link once i have the forntend link
@@ -157,12 +164,13 @@ const forgotPassword = async (req = request, res = response) => {
     // }
 
 
-
     res.status(StatusCodes.OK).json({
         ok: true,
         status: StatusCodes.OK,
         msg: 'a link was send to your email !',
+        resetToken
         // link,
+
     })
 
 

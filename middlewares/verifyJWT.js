@@ -175,9 +175,17 @@ const validateResetJWT = async (req = request, res = response, next) => {
                 status: StatusCodes.BAD_REQUEST
             })
         }
-
+        if (jwtVerified.type != 'reset token') {
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                msg: `invalid token`,
+                ok: false,
+                status: StatusCodes.BAD_REQUEST
+            })
+        }
 
         const { data } = jwtVerified
+
+
 
         const { id, password } = data
 
@@ -192,7 +200,9 @@ const validateResetJWT = async (req = request, res = response, next) => {
 
             })
         }
-        if (user.getDataValue('resetToken') != token) {
+
+
+        if (user.getDataValue('resetToken').toString() != token.toString()) {
             return res.status(StatusCodes.UNAUTHORIZED).json({
                 ok: false,
                 status: StatusCodes.UNAUTHORIZED,
@@ -210,7 +220,7 @@ const validateResetJWT = async (req = request, res = response, next) => {
     } catch (error) {
         console.log(error)
         res.status(StatusCodes.UNAUTHORIZED).json({
-            msg: `invalid JWT`,
+            msg: `invalid JWT tututu`,
             ok: 'something went wrong',
             status: StatusCodes.UNAUTHORIZED
         })
