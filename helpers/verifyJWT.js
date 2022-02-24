@@ -7,15 +7,18 @@ const verifyJWT = async (token) => {
 
     return await jwt.verify(token, process.env.PRIVATESECRETJWTKEY, (err, decoded) => {
 
-        if (err) {
+
+        const expiredAt = err?.expiredAt || false
+        if (expiredAt) {
+            return { expiredAt: err.expiredAt }
+
+        } else if (err) {
             return false
-        } else {
-            return decoded
         }
+
+
+        return decoded
     })
-
-
-
 
 
 

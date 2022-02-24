@@ -17,7 +17,7 @@ const getBalanceByUser = async (req = request, res = response) => {
         ok: true,
         status: StatusCodes.OK,
         msg: `success`,
-        balance: rows,
+        balance: rows[0].amount,
 
     })
 

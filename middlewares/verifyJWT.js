@@ -2,6 +2,11 @@ const { response, request } = require('express');
 
 const { StatusCodes } = require('http-status-codes');
 
+const dayjs = require('dayjs')
+
+
+
+
 const validateJwtMiddleware = require('../helpers/verifyJWT');
 const User = require('../models/User');
 
@@ -13,19 +18,31 @@ const validateJwt = async (req = request, res = response, next) => {
 
     try {
 
-
-        const { data } = await validateJwtMiddleware(token)
-
-
-        if (!data) return res.status(StatusCodes.BAD_REQUEST).json({
-            msg: `session expired`,
-            ok: false,
-            status: StatusCodes.BAD_REQUEST
-        })
+        const jwtVerified = await validateJwtMiddleware(token)
 
 
 
+        if (jwtVerified.expiredAt) {
+            const day = dayjs(jwtVerified.expiredAt).format('MM-DD-YYYY')
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                msg: `session expired at ${day}`,
+                ok: false,
+                status: StatusCodes.BAD_REQUEST
+            })
 
+        }
+
+        if (!jwtVerified) {
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                msg: `invalid signature`,
+                ok: false,
+                status: StatusCodes.BAD_REQUEST
+            })
+        }
+
+
+
+        const { data } = jwtVerified
 
         if (data.type != 'user_verification') {
             return res.status(StatusCodes.UNAUTHORIZED).json({
@@ -67,14 +84,30 @@ const validateEmailJWT = async (req = request, res = response, next) => {
 
     try {
 
-        const { data } = await validateJwtMiddleware(token)
+        const jwtVerified = await validateJwtMiddleware(token)
+
+        console.log(jwtVerified)
+
+        if (jwtVerified.expiredAt) {
+            const day = dayjs(jwtVerified.expiredAt).format('MM-DD-YYYY')
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                msg: `session expired at ${day}`,
+                ok: false,
+                status: StatusCodes.BAD_REQUEST
+            })
+
+        }
+
+        if (!jwtVerified) {
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                msg: `invalid signature`,
+                ok: false,
+                status: StatusCodes.BAD_REQUEST
+            })
+        }
 
 
-        if (!data) return res.status(StatusCodes.BAD_REQUEST).json({
-            msg: ` session expired`,
-            ok: false,
-            status: StatusCodes.BAD_REQUEST
-        })
+        const { data } = jwtVerified
 
 
 
@@ -121,15 +154,30 @@ const validateResetJWT = async (req = request, res = response, next) => {
 
     try {
 
-        const { data } = await validateJwtMiddleware(token)
+        const jwtVerified = await validateJwtMiddleware(token)
 
-        if (data.type != 'reset_verification') {
-            return res.status(StatusCodes.UNAUTHORIZED).json({
+
+
+        if (jwtVerified.expiredAt) {
+            const day = dayjs(jwtVerified.expiredAt).format('MM-DD-YYYY')
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                msg: `session expired at ${day}`,
                 ok: false,
-                status: StatusCodes.UNAUTHORIZED,
-                msg: `unauthorized, missing JWT`
+                status: StatusCodes.BAD_REQUEST
+            })
+
+        }
+
+        if (!jwtVerified) {
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                msg: `invalid signature`,
+                ok: false,
+                status: StatusCodes.BAD_REQUEST
             })
         }
+
+
+        const { data } = jwtVerified
 
         const { id, password } = data
 

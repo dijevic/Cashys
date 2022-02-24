@@ -1,6 +1,8 @@
 const { validationResult } = require('express-validator')
 const { StatusCodes } = require('http-status-codes')
 
+// middleware for express validator (check)
+
 
 const validatefields = (req, res, next) => {
     const results = validationResult(req)

@@ -1,8 +1,11 @@
 const { StatusCodes } = require('http-status-codes');
+
+
 const Category = require('../models/Category')
 const Operation = require('../models/Operation')
 const User = require('../models/User')
-const Balance = require('../models/Balance')
+const Balance = require('../models/Balance');
+
 
 const isBalance = async (req, res, next) => {
     const user = req.user
@@ -158,7 +161,6 @@ const isValidToken = async (req, res, next) => {
             msg: `unauthorized, missing JWT`
         })
     }
-
 
     req.token = token
 

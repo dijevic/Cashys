@@ -1,3 +1,6 @@
+
+// PATH: '/api/v1/categories'
+
 const { Router } = require('express')
 const { check } = require('express-validator')
 const validatefields = require('../middlewares/validate')
@@ -10,6 +13,8 @@ const {
 } = require('../controllers/category')
 
 const { validateCategoryByName, isCategory } = require('../middlewares/dbValidators')
+const { isValidToken } = require('../middlewares/dbValidators')
+
 
 
 const router = Router()
@@ -19,12 +24,15 @@ const router = Router()
 
 router.get('/',
     [
+
+        isValidToken,
         validateJwt
     ],
     getCategoriesByUser)
 
 router.post('/',
     [
+        isValidToken,
         validateJwt,
         validateCategoryByName,
         check('name', 'name is required').exists().not().isEmpty(),
@@ -33,6 +41,7 @@ router.post('/',
     , CreateCategory)
 router.delete('/:uuid',
     [
+        isValidToken,
         validateJwt,
         isCategory,
         check('uuid').exists().isUUID('4'),
@@ -41,6 +50,7 @@ router.delete('/:uuid',
     , deleteCategory)
 router.put('/:uuid',
     [
+        isValidToken,
         validateJwt,
         check('uuid').exists().isUUID('4'),
         isCategory,

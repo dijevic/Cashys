@@ -1,3 +1,6 @@
+
+// PATH: '/api/v1/operation'
+
 const { Router } = require('express')
 const { check } = require('express-validator')
 const validatefields = require('../middlewares/validate')
@@ -5,6 +8,7 @@ const { validateJwt } = require('../middlewares/verifyJWT')
 const { createOperation, getOperationsByUser, deleteOperation, updateOperation } = require('../controllers/operations')
 const { validateBalance } = require('../middlewares/validateBalance')
 const { isBalance, isCategory, isOperation, isBody } = require('../middlewares/dbValidators')
+const { isValidToken } = require('../middlewares/dbValidators')
 
 
 const router = Router()
@@ -12,6 +16,7 @@ const router = Router()
 
 router.post('/', [
 
+    isValidToken,
     validateJwt,
     isBalance,
     isCategory,
@@ -28,6 +33,7 @@ router.get('/', [validateJwt], getOperationsByUser)
 
 router.delete('/:uuid', [
 
+    isValidToken,
     validateJwt,
     check('uuid').isUUID('4').not().isEmpty().bail(),
     isOperation,
@@ -37,6 +43,7 @@ router.delete('/:uuid', [
 ], deleteOperation)
 router.put('/:uuid', [
 
+    isValidToken,
     validateJwt,
     isBody,
     isOperation,
