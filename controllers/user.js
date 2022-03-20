@@ -31,7 +31,7 @@ const updateUser = async (req = request, res = response) => {
         const userUpdated = user.set(body)
 
         await userUpdated.save()
-        const token = await generateJWT(user.uuid)
+        const token = await generateJWT({ id: user.uuid, type: 'user_verification' })
 
         res.status(StatusCodes.OK).json({
             ok: true,

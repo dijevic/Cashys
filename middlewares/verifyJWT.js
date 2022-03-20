@@ -48,7 +48,8 @@ const validateJwt = async (req = request, res = response, next) => {
             return res.status(StatusCodes.UNAUTHORIZED).json({
                 ok: false,
                 status: StatusCodes.UNAUTHORIZED,
-                msg: `unauthorized, missing JWT`
+                msg: `unauthorized, missing JWT`,
+                data
             })
         }
 
@@ -108,7 +109,7 @@ const validateEmailJWT = async (req = request, res = response, next) => {
 
         const { data } = jwtVerified
 
-
+        // aqui 2
 
         if (data.type != 'email_verification') {
             return res.status(StatusCodes.UNAUTHORIZED).json({
