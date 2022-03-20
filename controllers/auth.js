@@ -136,40 +136,33 @@ const forgotPassword = async (req = request, res = response) => {
 
 
 
-    const resetToken = await generateJWT({ id: user.uuid, password })
+    const resetToken = await generateJWT({ id: user.uuid, password, type: 'reset' })
     user.resetToken = resetToken
     await user.save()
 
 
+    const link = `http://localhost:3000/changepassword/validate/token${resetToken}`
 
 
+    try {
 
+        sendRecoverEmail(email, link)
 
-
-
-    // const link = `https://taskys.netlify.app/auth/change-password/${resetToken}`
-    // change reset token for link once i have the forntend link
-
-    // try {
-
-    //     ssendRecoverEmail(email, link)
-
-    // } catch (e) {
-    //     console.log(e)
-    //     return res.status(StatusCodes.NOT_FOUND).json({
-    //         ok: false,
-    //         status: StatusCodes.NOT_FOUND,
-    //         msg: `it was impossible to send the email`,
-    //     })
-    // }
+    } catch (e) {
+        console.log(e)
+        return res.status(StatusCodes.NOT_FOUND).json({
+            ok: false,
+            status: StatusCodes.NOT_FOUND,
+            msg: `it was impossible to send the email`,
+        })
+    }
 
 
     res.status(StatusCodes.OK).json({
         ok: true,
         status: StatusCodes.OK,
         msg: 'a link was send to your email !',
-        resetToken
-        // link,
+        link
 
     })
 
@@ -207,36 +200,29 @@ const emailVerification = async (req = request, res = response) => {
 
     const { email, password, name } = req.body
 
-
-    // genero JWT 
     const token = await generateJWT({ email, password, name, type: 'email_verification' })
 
-    // add the correct link once i have in hand the link
-    // dont forget to add the registration email function
+    const link = `http://localhost:3000/validate/${token}`
 
 
-    // const link = `https://taskys.netlify.app/auth/finish-registration/${token}`
+    try {
 
+        sendRegistrationEmail(email, link)
 
-    // try {
-
-    //     sendRegistrationEmail(email, link)
-
-    // } catch (e) {
-    //     console.log(e)
-    //     return res.status(StatusCodes.NOT_FOUND).json({
-    //         ok: false,
-    //         status: StatusCodes.NOT_FOUND,
-    //         msg: `it was impossible to send the email`,
-    //     })
-    // }
+    } catch (e) {
+        console.log(e)
+        return res.status(StatusCodes.NOT_FOUND).json({
+            ok: false,
+            status: StatusCodes.NOT_FOUND,
+            msg: `it was impossible to send the email`,
+        })
+    }
 
     res.status(StatusCodes.OK).json({
         ok: true,
         status: StatusCodes.OK,
         msg: 'an email has been send to your email !',
-        // link
-        token
+        link
     })
 
 

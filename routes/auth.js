@@ -80,8 +80,6 @@ router.put('/forgot-password',
 router.put('/change-password',
 
     [
-
-
         isValidToken,
         validateResetJWT
 

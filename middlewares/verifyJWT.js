@@ -86,7 +86,6 @@ const validateEmailJWT = async (req = request, res = response, next) => {
 
         const jwtVerified = await validateJwtMiddleware(token)
 
-        console.log(jwtVerified)
 
         if (jwtVerified.expiredAt) {
             const day = dayjs(jwtVerified.expiredAt).format('MM-DD-YYYY')
@@ -157,7 +156,6 @@ const validateResetJWT = async (req = request, res = response, next) => {
         const jwtVerified = await validateJwtMiddleware(token)
 
 
-
         if (jwtVerified.expiredAt) {
             const day = dayjs(jwtVerified.expiredAt).format('MM-DD-YYYY')
             return res.status(StatusCodes.BAD_REQUEST).json({
@@ -175,15 +173,17 @@ const validateResetJWT = async (req = request, res = response, next) => {
                 status: StatusCodes.BAD_REQUEST
             })
         }
-        if (jwtVerified.type != 'reset token') {
+
+        const { data } = jwtVerified
+
+        if (data.type != 'reset') {
             return res.status(StatusCodes.BAD_REQUEST).json({
-                msg: `invalid token`,
+                msg: `invalid token x`,
                 ok: false,
                 status: StatusCodes.BAD_REQUEST
             })
         }
 
-        const { data } = jwtVerified
 
 
 
@@ -220,8 +220,8 @@ const validateResetJWT = async (req = request, res = response, next) => {
     } catch (error) {
         console.log(error)
         res.status(StatusCodes.UNAUTHORIZED).json({
-            msg: `invalid JWT tututu`,
-            ok: 'something went wrong',
+            msg: `invalid JWT`,
+            ok: 'false',
             status: StatusCodes.UNAUTHORIZED
         })
     }
