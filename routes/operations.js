@@ -29,10 +29,10 @@ router.post('/', [
 ], createOperation)
 
 
-router.get('/', [validateJwt], getOperationsByUser)
+
+router.get('/', [isValidToken, validateJwt], getOperationsByUser)
 
 router.delete('/:uuid', [
-
     isValidToken,
     validateJwt,
     check('uuid').isUUID('4').not().isEmpty().bail(),

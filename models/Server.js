@@ -22,7 +22,6 @@ class Server {
         this.dbConection()
         this.middlewares()
         this.routes()
-        // test to keep heroku working (little trick to keep the free heroku teer working)
         this.keepHerokuWorking()
 
 

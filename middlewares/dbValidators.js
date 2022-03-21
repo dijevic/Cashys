@@ -153,7 +153,6 @@ const isValidToken = async (req, res, next) => {
 
     let token = req.header('x-token')
 
-
     if (!token) {
         return res.status(StatusCodes.UNAUTHORIZED).json({
             ok: false,

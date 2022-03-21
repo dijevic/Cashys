@@ -14,7 +14,7 @@ const User = require('../models/User');
 const validateJwt = async (req = request, res = response, next) => {
 
     const token = req.token
-
+    console.log(token)
 
     try {
 
@@ -36,7 +36,8 @@ const validateJwt = async (req = request, res = response, next) => {
             return res.status(StatusCodes.BAD_REQUEST).json({
                 msg: `invalid signature`,
                 ok: false,
-                status: StatusCodes.BAD_REQUEST
+                status: StatusCodes.BAD_REQUEST,
+                test: 'aqui'
             })
         }
 
@@ -97,6 +98,8 @@ const validateEmailJWT = async (req = request, res = response, next) => {
             })
 
         }
+
+        // 2
 
         if (!jwtVerified) {
             return res.status(StatusCodes.BAD_REQUEST).json({
@@ -166,7 +169,7 @@ const validateResetJWT = async (req = request, res = response, next) => {
             })
 
         }
-
+        // 3
         if (!jwtVerified) {
             return res.status(StatusCodes.BAD_REQUEST).json({
                 msg: `invalid signature`,
