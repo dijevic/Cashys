@@ -60,7 +60,6 @@ router.post('/login', [
 router.get('/renew',
     [
 
-        check('x-token').isJWT(),
         isValidToken,
         validateJwt,
 

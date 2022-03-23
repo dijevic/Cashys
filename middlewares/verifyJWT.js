@@ -14,7 +14,6 @@ const User = require('../models/User');
 const validateJwt = async (req = request, res = response, next) => {
 
     const token = req.token
-    console.log(token)
 
     try {
 
