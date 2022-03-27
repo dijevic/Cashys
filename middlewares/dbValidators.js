@@ -32,7 +32,6 @@ const isCategory = async (req, res, next) => {
 
     const uuid = req.body.category_id || req.params.uuid
 
-
     const category = await Category.findOne({ where: { uuid } })
 
 
@@ -133,7 +132,8 @@ const validateCategoryByName = async (req, res, next) => {
 
     const { name } = req.body
 
-    const category = await Category.findOne({ where: { name } })
+    const user = req.user
+    const category = await Category.findOne({ where: { name, user_id: user.getDataValue('id') } })
 
     if (category) {
         return res.status(StatusCodes.BAD_REQUEST).json({

@@ -1,5 +1,4 @@
 const { StatusCodes } = require("http-status-codes")
-const Balance = require("../models/Balance")
 
 const validateBalance = async (req, res, next) => {
 
@@ -11,15 +10,11 @@ const validateBalance = async (req, res, next) => {
 
 
 
-
-
-
-
     if (numbBalance == 0 && operation_Type == 'debt') {
         return res.status(StatusCodes.BAD_REQUEST).json({
             ok: false,
             status: StatusCodes.BAD_REQUEST,
-            msg: `Balance can ot be negative`,
+            msg: `Balance cannot be negative`,
         })
     }
 
@@ -29,7 +24,7 @@ const validateBalance = async (req, res, next) => {
         return res.status(StatusCodes.BAD_REQUEST).json({
             ok: false,
             status: StatusCodes.BAD_REQUEST,
-            msg: `Balance can ot be negative`,
+            msg: `Balance cannot be negative`,
         })
     }
     next()

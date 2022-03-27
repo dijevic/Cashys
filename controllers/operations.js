@@ -59,7 +59,13 @@ const getOperationsByUser = async (req = request, res = response) => {
 
     const user = req.user
 
-    const { rows, count } = await Operation.findAndCountAll({ where: { user_id: user.getDataValue('id') } })
+    const { rows, count } = await Operation.findAndCountAll({
+        where: { user_id: user.getDataValue('id') },
+        order: [
+            ['date', 'DESC']
+        ],
+        limit: 10
+    })
 
 
     res.status(StatusCodes.OK).json({

@@ -24,7 +24,6 @@ const router = Router()
 
 router.get('/',
     [
-
         isValidToken,
         validateJwt
     ],
