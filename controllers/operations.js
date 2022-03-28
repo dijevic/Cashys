@@ -1,6 +1,7 @@
 
 const { response, request } = require('express')
 const Operation = require('../models/Operation')
+const Category = require('../models/Category')
 const { StatusCodes } = require('http-status-codes');
 
 
@@ -64,6 +65,11 @@ const getOperationsByUser = async (req = request, res = response) => {
         order: [
             ['date', 'DESC']
         ],
+        include: {
+            model: Category,
+            as: 'category',
+            attributes: ['name']
+        },
         limit: 10
     })
 
