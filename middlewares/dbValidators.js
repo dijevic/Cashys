@@ -144,8 +144,6 @@ const validateCategoryByName = async (req, res, next) => {
     }
 
 
-
-
     next()
 }
 const isValidToken = async (req, res, next) => {
