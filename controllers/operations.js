@@ -59,7 +59,6 @@ const createOperation = async (req = request, res = response) => {
 const getOperationsByUser = async (req = request, res = response) => {
 
     const user = req.user
-
     const { rows, count } = await Operation.findAndCountAll({
         where: { user_id: user.getDataValue('id') },
         order: [
@@ -80,6 +79,48 @@ const getOperationsByUser = async (req = request, res = response) => {
         msg: `success`,
         operations: rows,
         total: count,
+
+    })
+
+
+
+}
+const getOperationsByUserFiltered = async (req = request, res = response) => {
+
+    const user = req.user
+    const params = req.query
+
+    const data = { user_id: user.getDataValue('id') }
+
+    if (params.operation_Type) {
+        data.operation_Type = params.operation_Type
+    }
+    if (params.category_id) {
+        const category = await Category.findOne({ where: { uuid: params.category_id } })
+        data.category_id = category.getDataValue('id')
+    }
+
+    const { rows, count } = await Operation.findAndCountAll({
+        where: data,
+        order: [
+            ['date', 'DESC']
+        ],
+        include: {
+            model: Category,
+            as: 'category',
+            attributes: ['name']
+        },
+        limit: 10
+    })
+
+
+    res.status(StatusCodes.OK).json({
+        ok: true,
+        status: StatusCodes.OK,
+        msg: `success`,
+        operations: rows,
+        total: count,
+
     })
 
 
@@ -197,6 +238,7 @@ module.exports = {
     createOperation,
     getOperationsByUser,
     deleteOperation,
-    updateOperation
+    updateOperation,
+    getOperationsByUserFiltered
 
 }
