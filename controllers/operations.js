@@ -86,11 +86,12 @@ const getOperationsByUser = async (req = request, res = response) => {
 
 }
 const getOperationsByUserFiltered = async (req = request, res = response) => {
-
     const user = req.user
     const params = req.query
 
     const data = { user_id: user.getDataValue('id') }
+
+
 
     if (params.operation_Type) {
         data.operation_Type = params.operation_Type
@@ -120,6 +121,7 @@ const getOperationsByUserFiltered = async (req = request, res = response) => {
         msg: `success`,
         operations: rows,
         total: count,
+
 
     })
 
