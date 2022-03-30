@@ -144,18 +144,18 @@ const forgotPassword = async (req = request, res = response) => {
     const link = `http://localhost:3000/changepassword/validate/${resetToken}`
 
 
-    // try {
+    try {
 
-    //     sendRecoverEmail(email, link)
+        sendRecoverEmail(email, link)
 
-    // } catch (e) {
-    //     console.log(e)
-    //     return res.status(StatusCodes.NOT_FOUND).json({
-    //         ok: false,
-    //         status: StatusCodes.NOT_FOUND,
-    //         msg: `it was impossible to send the email`,
-    //     })
-    // }
+    } catch (e) {
+        console.log(e)
+        return res.status(StatusCodes.NOT_FOUND).json({
+            ok: false,
+            status: StatusCodes.NOT_FOUND,
+            msg: `it was impossible to send the email`,
+        })
+    }
 
 
     res.status(StatusCodes.OK).json({

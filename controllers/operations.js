@@ -12,14 +12,15 @@ const createOperation = async (req = request, res = response) => {
     const balance = req.balance
     const category = req.category
 
-    let { amount, description, operation_Type } = req.body
+    let { amount, description, operation_Type, date } = req.body
 
     const savedOperation = await Operation.create({
         amount,
         description,
         operation_Type,
         user_id: user.getDataValue('id'),
-        category_id: category.getDataValue('id')
+        category_id: category.getDataValue('id'),
+        date
     })
 
     let newBalance = 0
@@ -176,7 +177,7 @@ const updateOperation = async (req = request, res = response) => {
     const operation = req.operation
     const balance = req.balance
 
-    let { amount, description } = req.body
+    let { amount, description, date } = req.body
 
 
     let newBalance = 0
@@ -212,6 +213,11 @@ const updateOperation = async (req = request, res = response) => {
 
     if (description) {
         data.description = description
+    }
+
+    if (date) {
+        data.date = date
+
     }
 
 
