@@ -101,6 +101,11 @@ const getOperationsByUserFiltered = async (req = request, res = response) => {
         const category = await Category.findOne({ where: { uuid: params.category_id } })
         data.category_id = category.getDataValue('id')
     }
+    if (params.date) {
+
+        data.date = params.date
+    }
+
 
     const { rows, count } = await Operation.findAndCountAll({
         where: data,
