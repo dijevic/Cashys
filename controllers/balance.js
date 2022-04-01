@@ -1,10 +1,6 @@
 const { response, request } = require('express')
 const Balance = require('../models/Balance')
 const { StatusCodes } = require('http-status-codes');
-// const User = require('../models/User')
-
-
-
 
 
 const getBalanceByUser = async (req = request, res = response) => {
