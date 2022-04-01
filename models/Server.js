@@ -30,7 +30,7 @@ class Server {
     async dbConection() {
 
         try {
-            await sequelize.sync({ alter: true });
+            await sequelize.authenticate();
             console.log('Connection has been established successfully.')
 
         } catch (error) {

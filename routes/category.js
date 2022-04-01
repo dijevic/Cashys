@@ -12,7 +12,7 @@ const {
     updateCategory,
 } = require('../controllers/category')
 
-const { validateCategoryByName, isCategory } = require('../middlewares/dbValidators')
+const { validateCategoryByName, isCategory, isBody, isBalance } = require('../middlewares/dbValidators')
 const { isValidToken } = require('../middlewares/dbValidators')
 
 
@@ -33,6 +33,7 @@ router.post('/',
     [
         isValidToken,
         validateJwt,
+        isBody,
         validateCategoryByName,
         check('name', 'name is required').exists().not().isEmpty(),
         validatefields
@@ -43,6 +44,7 @@ router.delete('/:uuid',
         isValidToken,
         validateJwt,
         isCategory,
+        isBalance,
         check('uuid').exists().isUUID('4'),
         validatefields
     ]
@@ -51,10 +53,10 @@ router.put('/:uuid',
     [
         isValidToken,
         validateJwt,
+        isBody,
         check('uuid').exists().isUUID('4'),
         isCategory,
         validateCategoryByName,
-
         check('name', 'name is required').exists().not().isEmpty(),
         validatefields
     ]

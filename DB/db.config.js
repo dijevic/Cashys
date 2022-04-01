@@ -25,7 +25,6 @@ const sequelize = new Sequelize(db, userDB, passwordDB, {
 
 });
 
-// cache=C:\Users\Diego vielma\Desktop\cashys\node_modules\tmpnodejsnpm-cache
 module.exports = sequelize
 
 
