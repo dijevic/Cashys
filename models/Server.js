@@ -22,7 +22,6 @@ class Server {
         this.dbConection()
         this.middlewares()
         this.routes()
-        this.keepHerokuWorking()
 
 
     }
@@ -30,7 +29,7 @@ class Server {
     async dbConection() {
 
         try {
-            await sequelize.sync({ force: true });
+            await sequelize.authenticate()
             console.log('Connection has been established successfully.')
 
         } catch (error) {
@@ -65,14 +64,8 @@ class Server {
 
     }
 
-    // test to keep heroku working (little trick to keep the free heroku teer working)
 
-    keepHerokuWorking() {
-        let i = 0
-        setTimeout(() => {
-            i++
-        }, 1700000)
-    }
+
 
 }
 
