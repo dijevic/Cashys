@@ -26,8 +26,6 @@ const isBalance = async (req, res, next) => {
     next()
 }
 
-
-
 const isCategory = async (req, res, next) => {
 
     const uuid = req.body.category_id || req.params.uuid
@@ -50,6 +48,15 @@ const isCategory = async (req, res, next) => {
 const isOperation = async (req, res, next) => {
 
     const { uuid } = req.params
+
+    if (!uuid) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            ok: false,
+            status: StatusCodes.BAD_REQUEST,
+            msg: `an UUID is required for this operation`,
+        })
+
+    }
     const operation = await Operation.findOne({ where: { uuid } })
     if (!operation) {
         return res.status(StatusCodes.BAD_REQUEST).json({
@@ -87,6 +94,15 @@ const isValidEmail = async (req, res, next) => {
 
     const { email } = req.body
 
+    if (!email) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            ok: false,
+            status: StatusCodes.BAD_REQUEST,
+            msg: `an email is required`,
+        })
+
+    }
+
 
     const userEmail = await User.findOne({ where: { email } })
 
@@ -109,6 +125,14 @@ const isInvalidValidEmail = async (req, res, next) => {
 
 
     const { email } = req.body
+    if (!email) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            ok: false,
+            status: StatusCodes.BAD_REQUEST,
+            msg: `an email is required`,
+        })
+
+    }
 
 
     const userEmail = await User.findOne({ where: { email } })
@@ -131,6 +155,15 @@ const validateCategoryByName = async (req, res, next) => {
 
 
     const { name } = req.body
+
+    if (!name) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            ok: false,
+            status: StatusCodes.BAD_REQUEST,
+            msg: `a category name is required`,
+        })
+
+    }
 
     const user = req.user
     const category = await Category.findOne({ where: { name, user_id: user.getDataValue('id') } })
