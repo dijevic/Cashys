@@ -141,7 +141,7 @@ const forgotPassword = async (req = request, res = response) => {
     await user.save()
 
 
-    const link = `http://localhost:3000/changepassword/validate/${resetToken}`
+    const link = `https://cashys.netlify.app/changepassword/validate/${resetToken}`
 
 
     try {
@@ -202,7 +202,7 @@ const emailVerification = async (req = request, res = response) => {
 
     const token = await generateJWT({ email, password, name, type: 'email_verification' })
 
-    const link = `http://localhost:3000/validate/${token}`
+    const link = `https://cashys.netlify.app/validate/${token}`
 
 
     try {
