@@ -146,7 +146,7 @@ const forgotPassword = async (req = request, res = response) => {
 
     try {
 
-        sendRecoverEmail(email, link)
+        sendRecoverEmail(email, link, user.name)
 
     } catch (e) {
         console.log(e)
@@ -207,7 +207,7 @@ const emailVerification = async (req = request, res = response) => {
 
     try {
 
-        sendRegistrationEmail(email, link)
+        sendRegistrationEmail(email, link, name)
 
     } catch (e) {
         console.log(e)
