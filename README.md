@@ -4,21 +4,21 @@
 
  <br/>
 
-<p>The project has been done with Node js, Express js, mysql , sequelize  & HEROKU for storage and Clever Cloud to storage the DB </p>
+The project has been done with _Node js_, _Express js_, _mysql_ , _sequelize_ & _HEROKU_ for storage and _Clever Cloud_ to storage the DB
 
-<p>The main idea of this project was to create an API and a full backend service ,  to deal with  all necessary things  to keep on track a money balance and their incomes and debts.  </p>
+**The main idea of this project was to create an API and a full backend service , to deal with all necessary things to keep on track a money balance and their incomes and debts.**
 
-<p>Besides this, an auth service is done to cope  with authentication and being able do a CRUD for operations, balances and categories by an specific user</p>
+Besides this, an _auth service_ is done to cope with authentication and being able do a **CRUD for operations, balances and categories by an specific user**</p>
 
-<p>For authentication i used JWT, to deal with the server i used express js , to handle the DB storage  clever cloud and to storage ther rest-server the well known Heroku</p>
+For authentication i used **JWT**, to deal with the server i used **express js** , to handle the DB storage **clever cloud** and to storage ther rest-server the well known **Heroku**
 
 <p>Finally I worked with the ORM Sequelize to deal with the DB petitions</p>
 
   <br/>
 
-<p margin="20px"><b>To start with this project in local :</b></p>
+**To start with this project in local :**
 
-<p align="center">First step :</p>
+_First step :_
 
 - Copy and paste the following code on your Command Prompt :
 
@@ -26,7 +26,7 @@
  https://github.com/dijevic/Cashys.git
 ```
 
-<p align="center">Second step </p>
+_Second step :_
 
 - Navigate to the folder.
 
@@ -41,13 +41,13 @@
 
 ```
 
-<p align="center">install all the dependencies</p>
+_install all the dependencies :_
 
 ```
  npm install
 ```
 
-<p align="center">Run the code</p>
+_Run the code :_
 
 - To be able to run the code without DB problems, please first create a Mysql or Maria DB database in your local computer with the name : **cashy** , password: **null** and user: **root**
 
@@ -57,8 +57,7 @@
 npm run dev
 ```
 
-<p>There you go, you should see some logs in your Command Prompt about connection </p>
+There you go, you should see some logs in your Command Prompt about connection
 
-<p>If you want , you can visit the online project already working : </p>
-
-<a href="https://cashys.netlify.app/" target="_blank">GO TO CASHYS</a>
+If you want , you can visit the online project already working :
+[Go to cashys](https://cashys.netlify.app/)
