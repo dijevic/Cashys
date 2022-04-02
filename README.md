@@ -1,9 +1,9 @@
 <h1 align="center"> Hi ! this is the  CASHYS backend : </h1>
-<h3 color="red" align="center">A complete backend service for the cashys app </h3>
+<h3 color="#fff" align="center">A complete backend service for the cashys app </h3>
 
  <br/>
 
-<p margin="20px">The project has been done with Node js, Express js, mysql , sequelize  & HEROKU for storage and Clever Cloud to storage the DB </p>
+<p>The project has been done with Node js, Express js, mysql , sequelize  & HEROKU for storage and Clever Cloud to storage the DB </p>
 
 <p>The main idea of this project was to create an API and a full backend service ,  to deal with  all necessary things  to keep on track a money balance and their incomes and debts.  </p>
 
@@ -48,7 +48,7 @@
 
 <p align="center">Run the code</p>
 
-- To be able to run the code without DB problems, please first create a Mysql or Maria DB database in your local computer with the name **cashy** , password **null** and user **root**
+- To be able to run the code without DB problems, please first create a Mysql or Maria DB database in your local computer with the name : **cashy** , password: **null** and user: **root**
 
 - Once you have setted up your database run in your command Prompt the next code :
 

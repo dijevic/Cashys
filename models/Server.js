@@ -29,8 +29,16 @@ class Server {
     async dbConection() {
 
         try {
-            await sequelize.authenticate()
-            console.log('Connection has been established successfully.')
+
+            if (process.env.npm_lifecycle_event == 'dev') {
+                await sequelize.sync({ alter: true })
+                console.log('Connection has been established successfully.')
+
+            } else {
+                await sequelize.authenticate()
+                console.log('Connection has been established successfully.')
+            }
+
 
         } catch (error) {
             console.log({ error })
