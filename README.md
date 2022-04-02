@@ -1,4 +1,4 @@
-# Hi ! this is the CASHYS backend :D :)
+<h1 align="center">Hi ! this is the CASHYS backend 😎 </h1>
 
 <h3 color="#fff" align="center">A complete backend service for the cashys app </h3>
 
