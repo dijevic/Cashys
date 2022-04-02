@@ -12,9 +12,12 @@ Besides this, an _auth service_ is done to cope with authentication and being ab
 
 For authentication i used **JWT**, to deal with the server i used **express js** , to handle the DB storage **clever cloud** and to storage ther rest-server the well known **Heroku**
 
-<p>Finally I worked with the ORM Sequelize to deal with the DB petitions</p>
+Finally I worked with the ORM **Sequelize** to deal with the DB petitions
 
   <br/>
+
+**to see the API documentation :**
+[Cashys documentation](https://documenter.getpostman.com/view/12181072/UVyswbFu)
 
 **To start with this project in local :**
 

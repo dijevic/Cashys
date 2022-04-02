@@ -140,8 +140,15 @@ const forgotPassword = async (req = request, res = response) => {
     user.resetToken = resetToken
     await user.save()
 
+    let link = ''
 
-    const link = `https://cashys.netlify.app/changepassword/validate/${resetToken}`
+    if (process.env.npm_lifecycle_event == 'dev') {
+        link = `https://localhost:3000/changepassword/validate/${resetToken}`
+
+    } else {
+        link = `https://cashys.netlify.app/changepassword/validate/${resetToken}`
+    }
+
 
 
     try {
@@ -202,7 +209,16 @@ const emailVerification = async (req = request, res = response) => {
 
     const token = await generateJWT({ email, password, name, type: 'email_verification' })
 
-    const link = `https://cashys.netlify.app/validate/${token}`
+    let link = ''
+
+    if (process.env.npm_lifecycle_event == 'dev') {
+        link = `http://localhost:3000/validate/${token}`
+
+    } else {
+        link = `https://cashys.netlify.app/validate/${token}`
+    }
+
+
 
 
     try {
