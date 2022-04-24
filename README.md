@@ -50,9 +50,30 @@ _install all the dependencies :_
  npm install
 ```
 
+_Create a **.ENV** file:_
+
+- You should create the following env vars:
+
+```
+PORT=dummyNumber
+PRIVATESECRETJWTKEY=dummypassword
+EMAILUSER=dummyemailuser
+EMAILTRANSPORTERKEY=dummyemailkey
+```
+
+NOTE : **EMAILUSER** and **EMAILTRANSPORTERKEY** env vars are useful for using the auth functions(like create an user or recover a password ) , basically youll need to know how to setup nodemailer with google(because i am using gmail to send the emails)
+
+<br/>
+<br/>
+
 _Run the code :_
 
 - To be able to run the code without DB problems, please first create a Mysql or Maria DB database in your local computer with the name : **cashy** , password: **null** and user: **root**
+
+NOTE : the params _name_,_password_,_user_ are not mandatory with these names but the development mode has been setted up with these name, if you want to change it just go to the db config file and change the respectives names
+
+<br/>
+<br/>
 
 - Once you have setted up your database run in your command Prompt the next code :
 
@@ -60,7 +81,7 @@ _Run the code :_
 npm run dev
 ```
 
-There you go, you should see some logs in your Command Prompt about connection
+There you go, you should see some logs in your Command Prompt about connection.
 
-If you want , you can visit the online project already working :
+If you want , you can visit the alive project already working :
 [Go to cashys](https://cashys.netlify.app/)
