@@ -55,7 +55,7 @@ _Create a **.ENV** file:_
 - You should create the following env vars:
 
 ```
-PORT=dummyNumber
+PORT=4000
 PRIVATESECRETJWTKEY=dummypassword
 EMAILUSER=dummyemailuser
 EMAILTRANSPORTERKEY=dummyemailkey
