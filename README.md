@@ -61,7 +61,7 @@ EMAILUSER=dummyemailuser
 EMAILTRANSPORTERKEY=dummyemailkey
 ```
 
-NOTE : **EMAILUSER** and **EMAILTRANSPORTERKEY** env vars are useful for using the auth functions(like create an user or recover a password ) , basically youll need to know how to setup nodemailer with google(because i am using gmail to send the emails)
+NOTE : **EMAILUSER** and **EMAILTRANSPORTERKEY** env vars are useful for using the auth functions(like create an user or recover a password ) , basically youll need to know how to setup nodemailer with google(because i am using gmail for sending the emails)
 
 <br/>
 <br/>
